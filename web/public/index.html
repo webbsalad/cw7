@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOS Portfolio Manager</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dos-container">
+        <div class="title-bar">
+            <span class="title-text">Portfolio Manager</span>
+        </div>
+        <div class="dos-content">
+            <div class="keyboard-hint">
+                <span>↑↓ Navigate</span>
+                <span>→ Open</span>
+                <span>← Back</span>
+                <span>Enter Execute</span>
+            </div>
+
+            <div class="explorer-section">
+                <div class="explorer-title">Directory: <span id="currentPath">C:\</span></div>
+                <div id="fileTree" class="file-tree"></div>
+            </div>
+            
+            <div class="terminal-section">
+                <div class="terminal-title">
+                    Command Line
+                    <span class="terminal-help">[cd folder] [cd..] [type file] [dir] [about] [help] [cls]</span>
+                </div>
+                <div class="command-line">
+                    <span class="prompt">C:\></span>
+                    <input type="text" id="commandInput" class="input-field" placeholder="">
+                </div>
+                <div id="output" class="output"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="fileViewerModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-title-bar">
+                <span class="modal-title" id="modalTitle">File Viewer</span>
+                <span class="modal-close" onclick="closeFileViewer()">✕</span>
+            </div>
+            <div id="fileContent" class="modal-body"></div>
+        </div>
+    </div>
+
+    <div id="imageViewerModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-title-bar">
+                <span class="modal-title" id="imageModalTitle">Image Viewer</span>
+                <span class="modal-close" onclick="closeImageViewer()">✕</span>
+            </div>
+            <div id="imageContent" class="modal-body image-viewer"></div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content confirm-modal-content">
+            <div class="modal-title-bar">
+                <span class="modal-title">Confirm</span>
+            </div>
+            <div class="confirm-body">
+                <div id="confirmMessage" class="confirm-message"></div>
+                <div class="confirm-buttons">
+                    <button id="confirmYes" class="confirm-btn">[y] Yes</button>
+                    <button id="confirmNo" class="confirm-btn">[n] No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="aboutModal" class="modal hidden">
+        <div class="modal-content about-modal-content">
+            <div class="modal-title-bar">
+                <span class="modal-title">About</span>
+                <span class="modal-close" onclick="closeAbout()">✕</span>
+            </div>
+            <div class="about-body">
+                <div class="about-left">
+                    <div id="aboutImage" class="about-image"></div>
+                </div>
+                <div class="about-right">
+                    <div id="aboutText" class="about-text"></div>
+                    <div id="aboutContacts" class="about-contacts"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
