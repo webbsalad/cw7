@@ -1,4 +1,3 @@
-// ASCII Art conversion function - PROPER IMPLEMENTATION
 function imageToASCII(imagePath, width = 100, height = 50) {
     return new Promise((resolve) => {
         const img = new Image();
@@ -10,33 +9,27 @@ function imageToASCII(imagePath, width = 100, height = 50) {
                 canvas.width = width;
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
-                
-                // Draw image
+
                 ctx.drawImage(img, 0, 0, width, height);
                 
                 const imageData = ctx.getImageData(0, 0, width, height);
                 const data = imageData.data;
-                
-                // Proper ASCII character palette ordered by density
+
                 const ASCII_CHARS = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. ".split("");
                 
                 let ascii = '';
                 let lineCount = 0;
-                
-                // Process each pixel
+
                 for (let i = 0; i < data.length; i += 4) {
                     const r = data[i];
                     const g = data[i + 1];
                     const b = data[i + 2];
-                    
-                    // Convert to grayscale using proper formula
+
                     const gray = (r * 0.299 + g * 0.587 + b * 0.114) / 255;
-                    
-                    // Map to ASCII character based on brightness
+
                     const charIndex = Math.floor(gray * (ASCII_CHARS.length - 1));
                     ascii += ASCII_CHARS[charIndex];
-                    
-                    // Line break
+
                     lineCount++;
                     if (lineCount >= width) {
                         ascii += '\n';
@@ -55,8 +48,7 @@ function imageToASCII(imagePath, width = 100, height = 50) {
             console.error('Image load error:', imagePath);
             resolve('[Image could not be loaded]');
         };
-        
-        // Handle both direct paths and API paths
+
         if (imagePath.startsWith('/api/')) {
             img.src = imagePath;
         } else if (imagePath.startsWith('/data/')) {
@@ -79,8 +71,7 @@ class PortfolioManager {
         this.currentItems = [];
         this.parentFolderIndex = -1;
         this.confirmCallback = null;
-        
-        // Store globally
+
         window.portfolioManager = this;
         
         this.init();
@@ -128,13 +119,11 @@ class PortfolioManager {
             }
         });
 
-        // Global keyboard navigation
         document.addEventListener('keydown', (e) => {
             const modal = document.getElementById('fileViewerModal');
             const imageModal = document.getElementById('imageViewerModal');
             const aboutModal = document.getElementById('aboutModal');
-            
-            // Don't handle arrow keys if a modal is open
+
             if (modal.classList.contains('hidden') && 
                 imageModal.classList.contains('hidden') && 
                 aboutModal.classList.contains('hidden')) {
@@ -255,19 +244,15 @@ class PortfolioManager {
             const response = await fetch(`/api/file?path=${encodeURIComponent(filePath)}`);
             if (!response.ok) throw new Error('File not found');
 
-            // Check if it's an image
             if (filename.match(/\.(png|jpg|jpeg|gif|bmp)$/i)) {
                 this.showImageConfirm(filename, filePath);
             } else {
-                // Check if file type is supported as plain text
                 const supportedTextFormats = /\.(txt|go|py|js|ts|java|c|cpp|h|html|css|json|xml|yaml|yml|md|sh|bash|rb|php|sql|swift|kt|rs|pl|lua|r|matlab|vb|cs|scala|groovy|clojure|erlang|elixir|haskell|rust|asm|log|conf|cfg|ini|env|gradle|maven|npm|yarn)$/i;
                 
                 if (supportedTextFormats.test(filename)) {
-                    // Safe to open as text
                     const content = await response.text();
                     this.openFileViewer(filename, content);
                 } else {
-                    // Unsafe format - ask user
                     this.showFileConfirm(filename, filePath);
                 }
             }
@@ -332,14 +317,12 @@ class PortfolioManager {
         title.textContent = filename;
         
         if (!useASCII) {
-            // Display raw image
             const imageUrl = `/api/file?path=${encodeURIComponent(filepath)}`;
             imageContent.innerHTML = `<img src="${imageUrl}" style="max-width: 100%; max-height: 100%; object-fit: contain;">`;
             modal.classList.remove('hidden');
             return;
         }
-        
-        // Display ASCII art
+
         imageContent.innerHTML = '<div class="ascii-art">Loading...</div>';
         
         try {
@@ -375,12 +358,10 @@ class PortfolioManager {
         try {
             const imageUrl = '/data/static/images/face.png';
             console.log('Loading image from:', imageUrl);
-            
-            // Larger size for better detail
+
             const imageAscii = await imageToASCII(imageUrl, 100, 50);
             document.getElementById('aboutImage').innerHTML = `<div class="ascii-art">${imageAscii}</div>`;
-            
-            // Load about text
+
             try {
                 console.log('Loading about.txt from: /data/static/text/about.txt');
                 const aboutResponse = await fetch('/data/static/text/about.txt');
@@ -395,8 +376,7 @@ class PortfolioManager {
                 console.warn('about.txt error:', e);
                 document.getElementById('aboutText').textContent = '[about.txt not found]';
             }
-            
-            // Load contacts
+
             try {
                 console.log('Loading contacts.txt from: /data/static/text/contacts.txt');
                 const contactsResponse = await fetch('/data/static/text/contacts.txt');
@@ -568,8 +548,7 @@ function closeAbout() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const manager = new PortfolioManager();
-    
-    // Confirm modal buttons
+
     document.getElementById('confirmYes').addEventListener('click', () => {
         if (manager && manager.confirmCallback) {
             manager.confirmCallback(true);
@@ -583,8 +562,7 @@ document.addEventListener('DOMContentLoaded', () => {
             closeConfirm();
         }
     });
-    
-    // Keyboard support for confirm modal
+
     document.addEventListener('keydown', (e) => {
         const confirmModal = document.getElementById('confirmModal');
         if (!confirmModal.classList.contains('hidden')) {
